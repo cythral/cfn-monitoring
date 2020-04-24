@@ -114,23 +114,6 @@ Resources:
                 - Name: buildResults
               Configuration:
                 ProjectName: !Ref BuildProject
-        - Name: Shared
-          Actions:
-            - Name: Deploy
-              RunOrder: 1
-              ActionTypeId:
-                Category: Deploy
-                Provider: CloudFormation
-                Owner: AWS
-                Version: 1
-              InputArtifacts:
-                - Name: buildResults
-              Configuration:
-                StackName: cfn-monitoring
-                ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::master.template.yml
-                RoleArn: !ImportValue cfn-utilities:MasterRoleArn
-                Capabilities: CAPABILITY_IAM
         - Name: Dev
           Actions:
             - Name: Deploy
@@ -167,3 +150,20 @@ Resources:
                 TemplatePath: buildResults::agent.template.yml
                 RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
                 Capabilities: CAPABILITY_NAMED_IAM
+        - Name: Shared
+          Actions:
+            - Name: Deploy
+              RunOrder: 1
+              ActionTypeId:
+                Category: Deploy
+                Provider: CloudFormation
+                Owner: AWS
+                Version: 1
+              InputArtifacts:
+                - Name: buildResults
+              Configuration:
+                StackName: cfn-monitoring
+                ActionMode: CREATE_UPDATE
+                TemplatePath: buildResults::master.template.yml
+                RoleArn: !ImportValue cfn-utilities:MasterRoleArn
+                Capabilities: CAPABILITY_IAM
