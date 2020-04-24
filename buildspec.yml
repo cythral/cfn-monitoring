@@ -1,0 +1,16 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      dotnet: 3.1
+    commands:
+      - pip install cfn-lint
+      
+  build:
+    commands:
+      - cfn-lint deploy/master.template.yml
+  
+artifacts:
+  discard-paths: yes
+  files:
+    - "deploy/master.template.yml"

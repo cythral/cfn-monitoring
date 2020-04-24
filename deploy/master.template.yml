@@ -1,0 +1,9 @@
+Resources:
+  ServiceLinkedRole:
+    Type: AWS::IAM::ServiceLinkedRole
+    Properties:
+      AWSServiceName: cloudwatch-crossaccount.amazonaws.com
+      CustomSuffix: AWSServiceRoleForCloudWatchCrossAccount
+      Description: Allows CloudWatch to assume CloudWatch-CrossAccountSharing roles in remote accounts on behalf of the current account in order to display data cross-account, cross region
+
+      
