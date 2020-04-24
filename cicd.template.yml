@@ -148,7 +148,7 @@ Resources:
                 ActionMode: CREATE_UPDATE
                 TemplatePath: buildResults::agent.template.yml
                 RoleArn: !ImportValue cfn-metadata:DevAgentRoleArn
-                Capabilities: CAPABILITY_IAM
+                Capabilities: CAPABILITY_NAMED_IAM
         - Name: Prod
           Actions:
             - Name: Deploy
@@ -166,4 +166,4 @@ Resources:
                 ActionMode: CREATE_UPDATE
                 TemplatePath: buildResults::agent.template.yml
                 RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
-                Capabilities: CAPABILITY_IAM
+                Capabilities: CAPABILITY_NAMED_IAM
