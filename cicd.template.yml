@@ -131,3 +131,39 @@ Resources:
                 TemplatePath: buildResults::master.template.yml
                 RoleArn: !ImportValue cfn-utilities:MasterRoleArn
                 Capabilities: CAPABILITY_IAM
+        - Name: Dev
+          Actions:
+            - Name: Deploy
+              RunOrder: 1
+              RoleArn: !ImportValue cfn-metadata:DevAgentRoleArn
+              ActionTypeId:
+                Category: Deploy
+                Provider: CloudFormation
+                Owner: AWS
+                Version: 1
+              InputArtifacts:
+                - Name: buildResults
+              Configuration:
+                StackName: cfn-monitoring
+                ActionMode: CREATE_UPDATE
+                TemplatePath: buildResults::agent.template.yml
+                RoleArn: !ImportValue cfn-metadata:DevAgentRoleArn
+                Capabilities: CAPABILITY_IAM
+        - Name: Prod
+          Actions:
+            - Name: Deploy
+              RunOrder: 1
+              RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
+              ActionTypeId:
+                Category: Deploy
+                Provider: CloudFormation
+                Owner: AWS
+                Version: 1
+              InputArtifacts:
+                - Name: buildResults
+              Configuration:
+                StackName: cfn-monitoring
+                ActionMode: CREATE_UPDATE
+                TemplatePath: buildResults::agent.template.yml
+                RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
+                Capabilities: CAPABILITY_IAM
