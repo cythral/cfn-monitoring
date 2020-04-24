@@ -15,3 +15,10 @@ Resources:
         - arn:aws:iam::aws:policy/CloudWatchAutomaticDashboardsAccess
         - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
         - arn:aws:iam::aws:policy/AWSXrayReadOnlyAccess
+  
+  EventsPolicy: 
+    Type: AWS::Events::EventBusPolicy
+    Properties: 
+      Principal: !ImportValue cfn-utilities:MasterAccountId
+      Action: events:PutEvents
+      StatementId: MasterAccountEvents
