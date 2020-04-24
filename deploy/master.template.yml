@@ -17,8 +17,8 @@ Resources:
         - Id: Dev
           Arn: !Sub 
             - arn:aws:events:${AWS::Region}:${DevAccountId}:event-bus/default
-            - DevAccountId: !ImportValue cfn-utilities:DevAccountId
+            - DevAccountId: !ImportValue cfn-metadata:DevAccountId
         - Id: Prod
           Arn: !Sub 
             - arn:aws:events:${AWS::Region}:${ProdAccountId}:event-bus/default
-            - ProdAccountId: !ImportValue cfn-utilities:ProdAccountId
+            - ProdAccountId: !ImportValue cfn-metadata:ProdAccountId
