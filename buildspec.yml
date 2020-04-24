@@ -5,12 +5,14 @@ phases:
       dotnet: 3.1
     commands:
       - pip install cfn-lint
-      
+
   build:
     commands:
       - cfn-lint deploy/master.template.yml
-  
+      - cfn-lint deploy/agent.template.yml
+
 artifacts:
   discard-paths: yes
   files:
     - "deploy/master.template.yml"
+    - "deploy/agent.template.yml"
