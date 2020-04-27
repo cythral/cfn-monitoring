@@ -32,7 +32,7 @@ Resources:
       ResourceQuery:
         Type: TAG_FILTERS_1_0
         Query:
-          ResourceTypeFilters: [AWS::ECS::Service]
+          ResourceTypeFilters: [AWS::ECS::Cluster]
           TagFilters:
             - Key: ENABLE_SERVICE_STOPPING
               Values: ['true']
