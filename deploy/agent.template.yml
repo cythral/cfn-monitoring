@@ -52,7 +52,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Handler: ServiceStopper::Cythral.CloudFormation.Monitoring.ServiceStopper.Handler::Handle
-      CodeUri: bin/ServiceStopper/Release/netcoreapp3.1/publish/
+      CodeUri: ../bin/ServiceStopper/Release/netcoreapp3.1/publish/
       Policies:
         - !Ref ServiceStopperPolicy
       Events:
