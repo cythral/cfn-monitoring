@@ -46,6 +46,7 @@ Resources:
           - Effect: Allow
             Action:
               - resource-groups:ListGroupResources
+              - tag:GetResources
               - ecs:ListServices
               - ecs:DescribeServices
               - ecs:UpdateService
