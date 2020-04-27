@@ -8,11 +8,19 @@ phases:
 
   build:
     commands:
+      - dotnet publish -c Release
+      - dotnet test -c Release
+
+      - aws cloudformation package
+          --template-file deploy/agent.template.yml
+          --s3-bucket $ARTIFACT_STORE
+          --output-template-file deploy/agent.template.yml.packaged
+
       - cfn-lint deploy/master.template.yml
-      - cfn-lint deploy/agent.template.yml
+      - cfn-lint deploy/agent.template.yml.packaged
 
 artifacts:
   discard-paths: yes
   files:
     - "deploy/master.template.yml"
-    - "deploy/agent.template.yml"
+    - "deploy/agent.template.yml.packaged"

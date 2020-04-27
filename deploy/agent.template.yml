@@ -1,3 +1,4 @@
+Transform: AWS::Serverless-2016-10-31
 Resources:
   SharingRole:
     Type: AWS::IAM::Role
@@ -22,3 +23,44 @@ Resources:
       Principal: !ImportValue cfn-utilities:MasterAccountId
       Action: events:PutEvents
       StatementId: MasterAccountEvents
+
+  ClustersWithStoppableServices:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name: ClustersWithStoppableServices
+      Description: Clusters who have automatic service stopping enabled
+      Tags:
+        - Key: ENABLE_SERVICE_STOPPING
+          Value: 'true'
+
+  ServiceStopperPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - resource-groups:ListGroupResources
+              - ecs:ListServices
+              - ecs:DescribeServices
+              - ecs:UpdateService
+            Resource: "*"
+
+  ServiceStopper:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Handler: ServiceStopper::Cythral.CloudFormation.Monitoring.ServiceStopper.Handler::Handle
+      CodeUri: bin/ServiceStopper/Release/netcoreapp3.1/publish/
+      Policies:
+        - !Ref ServiceStopperPolicy
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Input: !Sub |
+              {
+                "MonitoredClustersGroupName": "${ClustersWithStoppableServices}"
+              }

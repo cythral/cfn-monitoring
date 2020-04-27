@@ -129,7 +129,7 @@ Resources:
               Configuration:
                 StackName: cfn-monitoring
                 ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::agent.template.yml
+                TemplatePath: buildResults::agent.template.yml.packaged
                 RoleArn: !ImportValue cfn-metadata:DevAgentRoleArn
                 Capabilities: CAPABILITY_NAMED_IAM
         - Name: Prod
@@ -147,7 +147,7 @@ Resources:
               Configuration:
                 StackName: cfn-monitoring
                 ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::agent.template.yml
+                TemplatePath: buildResults::agent.template.yml.packaged
                 RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
                 Capabilities: CAPABILITY_NAMED_IAM
         - Name: Shared
