@@ -29,9 +29,13 @@ Resources:
     Properties:
       Name: ClustersWithStoppableServices
       Description: Clusters who have automatic service stopping enabled
-      Tags:
-        - Key: ENABLE_SERVICE_STOPPING
-          Value: 'true'
+      ResourceQuery:
+        Type: TAG_FILTERS_1_0
+        Query:
+          ResourceTypeFilters: [AWS::ECS::Service]
+          TagFilters:
+            - Key: ENABLE_SERVICE_STOPPING
+              Values: ['true']
 
   ServiceStopperPolicy:
     Type: AWS::IAM::ManagedPolicy
