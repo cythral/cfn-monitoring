@@ -3,9 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.Lambda.Core;
+using Amazon.ResourceGroups;
+using Amazon.ResourceGroups.Model;
 using Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils;
 
-[assembly:LambdaSerializer(typeof(System.Text.Json.JsonSerializer))]
+[assembly:LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
 namespace Cythral.CloudFormation.Monitoring.ServiceStopper
 {
