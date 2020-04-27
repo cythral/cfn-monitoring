@@ -57,6 +57,7 @@ Resources:
       Runtime: dotnetcore3.1
       Handler: ServiceStopper::Cythral.CloudFormation.Monitoring.ServiceStopper.Handler::Handle
       CodeUri: ../bin/ServiceStopper/Release/netcoreapp3.1/publish/
+      Timeout: 300
       Policies:
         - !Ref ServiceStopperPolicy
       Events:
