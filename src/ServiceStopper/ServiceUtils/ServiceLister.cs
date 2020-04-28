@@ -1,11 +1,13 @@
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
-using Amazon.ResourceGroups;
-using Amazon.ResourceGroups.Model;
+using System.Linq;
+using System.Threading.Tasks;
+
 using Amazon.ECS;
 using Amazon.ECS.Model;
+using Amazon.ResourceGroups;
+using Amazon.ResourceGroups.Model;
+
 using Cythral.CloudFormation.Monitoring.ServiceStopper.Aws;
 
 using Task = System.Threading.Tasks.Task;
@@ -47,18 +49,20 @@ namespace Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils
 
             return listGroupResourcesResponse.ResourceIdentifiers.Select(identifier => identifier.ResourceArn).ToList();
         }
-        
+
         private Dictionary<string, List<string>> GetClusterToServiceArnsDict(List<string> clusterArns)
         {
             var result = new Dictionary<string, List<string>>();
             var tasks = new List<Task>();
-            
+
             foreach (var clusterArn in clusterArns)
             {
-                var task = Task.Run(async delegate {
+                var task = Task.Run(async delegate
+                {
                     var serviceArns = await GetServiceArnsForCluster(clusterArn);
-                    
-                    lock (result) {
+
+                    lock (result)
+                    {
                         result.Add(clusterArn, serviceArns);
                     }
                 });
@@ -85,13 +89,15 @@ namespace Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils
         {
             var results = new List<Service>();
             var tasks = new List<Task>();
-            
-            foreach(var entry in clusterToServiceArns)
+
+            foreach (var entry in clusterToServiceArns)
             {
-                var task = Task.Run(async delegate {
+                var task = Task.Run(async delegate
+                {
                     var services = await GetServicesForCluster(entry.Key, entry.Value);
 
-                    lock (results) {
+                    lock (results)
+                    {
                         results.AddRange(services);
                     }
                 });

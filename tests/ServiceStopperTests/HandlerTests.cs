@@ -1,10 +1,14 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using NSubstitute;
-using FluentAssertions;
-using NUnit.Framework;
+
 using Amazon.ECS.Model;
+
+using FluentAssertions;
+
+using NSubstitute;
+
+using NUnit.Framework;
 
 using Task = System.Threading.Tasks.Task;
 
@@ -19,7 +23,8 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper
         ServiceScaler serviceScaler = null!;
         ServiceLister serviceLister = null!;
 
-        static Service StoppableService = new Service {
+        static Service StoppableService = new Service
+        {
             Deployments = new List<Deployment> {
                 new Deployment {
                     UpdatedAt = DateTime.Now.AddHours(-2)
@@ -27,7 +32,8 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper
             }
         };
 
-        static Service UnstoppableService = new Service {
+        static Service UnstoppableService = new Service
+        {
             Deployments = new List<Deployment> {
                 new Deployment {
                     UpdatedAt = DateTime.Now.AddMinutes(-30)
@@ -42,7 +48,7 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper
                 MonitoredClustersGroupName = monitoredClusterGroupName
             };
         }
-        
+
         [SetUp]
         public void SetupServiceLister()
         {

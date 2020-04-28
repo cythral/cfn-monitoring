@@ -28,7 +28,7 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Effect: Allow 
+          - Effect: Allow
             Action: s3:*Object
             Resource:
               - !Sub arn:aws:s3:::${ArtifactStore}
@@ -47,16 +47,16 @@ Resources:
       EncryptionKey: !ImportValue cfn-utilities:ArtifactKeyArn
       Environment:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
-        ComputeType: BUILD_GENERAL1_SMALL 
+        ComputeType: BUILD_GENERAL1_SMALL
         EnvironmentVariables:
           - Name: ARTIFACT_STORE
             Value: !Ref ArtifactStore
         Type: LINUX_CONTAINER
       Artifacts:
         Type: CODEPIPELINE
-      Source: 
+      Source:
         Type: CODEPIPELINE
-  
+
   Webhook:
     Type: AWS::CodePipeline::Webhook
     Properties:
@@ -74,11 +74,11 @@ Resources:
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      Name: !Sub ${AWS::StackName}-pipeline 
+      Name: !Sub ${AWS::StackName}-pipeline
       ArtifactStore:
         Type: S3
         Location: !Ref ArtifactStore
-        EncryptionKey: 
+        EncryptionKey:
           Id: !ImportValue cfn-utilities:ArtifactKeyArn
           Type: KMS
       RoleArn: !ImportValue cfn-utilities:MasterRoleArn
@@ -114,6 +114,23 @@ Resources:
                 - Name: buildResults
               Configuration:
                 ProjectName: !Ref BuildProject
+        - Name: Shared
+          Actions:
+            - Name: Deploy
+              RunOrder: 1
+              ActionTypeId:
+                Category: Deploy
+                Provider: CloudFormation
+                Owner: AWS
+                Version: 1
+              InputArtifacts:
+                - Name: buildResults
+              Configuration:
+                StackName: cfn-monitoring
+                ActionMode: CREATE_UPDATE
+                TemplatePath: buildResults::master.template.yml
+                RoleArn: !ImportValue cfn-utilities:MasterRoleArn
+                Capabilities: CAPABILITY_IAM
         - Name: Dev
           Actions:
             - Name: Deploy
@@ -150,20 +167,3 @@ Resources:
                 TemplatePath: buildResults::agent.template.yml.packaged
                 RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
-        - Name: Shared
-          Actions:
-            - Name: Deploy
-              RunOrder: 1
-              ActionTypeId:
-                Category: Deploy
-                Provider: CloudFormation
-                Owner: AWS
-                Version: 1
-              InputArtifacts:
-                - Name: buildResults
-              Configuration:
-                StackName: cfn-monitoring
-                ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::master.template.yml
-                RoleArn: !ImportValue cfn-utilities:MasterRoleArn
-                Capabilities: CAPABILITY_IAM
