@@ -1,18 +1,15 @@
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  CloudTrailBucket:
-    Type: AWS::S3::Bucket
+  Fn::Transform:
+    Name: AWS::Include
     Properties:
-      LifecycleConfiguration:
-        Rules:
-          - Status: Enabled
-            ExpirationInDays: 30
-
-  CloudTrail:
-    Type: AWS::CloudTrail::Trail
-    Properties:
-      S3BucketName: !Ref CloudTrailBucket
-      IsLogging: true
+      Location: ./cloudtrail.template.yml
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3001
+            - E3006
 
   SharingRole:
     Type: AWS::IAM::Role
