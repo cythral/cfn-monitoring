@@ -1,16 +1,5 @@
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  Fn::Transform:
-    Name: "AWS::Include"
-    Parameters:
-      Location: cloudtrail.template.yml
-    Metadata:
-      cfn-lint:
-        config:
-          ignore_checks:
-            - E3001
-            - E3006
-
   SharingRole:
     Type: AWS::IAM::Role
     Properties:
@@ -81,3 +70,8 @@ Resources:
               {
                 "MonitoredClustersGroupName": "${ClustersWithStoppableServices}"
               }
+
+  Fn::Transform:
+    Name: "AWS::Include"
+    Parameters:
+      Location: cloudtrail.template.yml
