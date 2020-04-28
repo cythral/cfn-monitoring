@@ -3,7 +3,7 @@ Resources:
   Fn::Transform:
     Name: AWS::Include
     Properties:
-      Location: ./cloudtrail.template.yml
+      Location: cloudtrail.template.yml
 
   SharingRole:
     Type: AWS::IAM::Role
