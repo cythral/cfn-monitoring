@@ -7,5 +7,11 @@ Resources:
 
   Fn::Transform:
     Name: AWS::Include
-    Properties:
-      Location: cloudtrail.template.yml
+    Parameters:
+      Location: ./cloudtrail.template.yml
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3001
+            - E3006
