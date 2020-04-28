@@ -12,7 +12,7 @@ phases:
       - dotnet test -c Release
 
       - aws cloudformation package
-        --template-file deploycfn-monitoring.template.yml
+        --template-file deploy/cfn-monitoring.template.yml
         --s3-bucket $ARTIFACT_STORE
         --output-template-file deploy/cfn-monitoring.template.yml.packaged
 
