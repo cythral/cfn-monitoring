@@ -4,21 +4,3 @@ Resources:
     Properties:
       AWSServiceName: cloudwatch-crossaccount.amazonaws.com
       Description: Allows CloudWatch to assume CloudWatch-CrossAccountSharing roles in remote accounts on behalf of the current account in order to display data cross-account, cross region
-
-  PipelineStartedEvent:
-    Type: AWS::Events::Rule
-    Properties:
-      EventPattern:
-        source: ["aws.codepipeline"]
-        detail-type: ["CodePipeline Pipeline Execution State Change"]
-        detail:
-          state: ["STARTED"]
-      Targets:
-        - Id: Dev
-          Arn: !Sub 
-            - arn:aws:events:${AWS::Region}:${DevAccountId}:event-bus/default
-            - DevAccountId: !ImportValue cfn-metadata:DevAccountId
-        - Id: Prod
-          Arn: !Sub 
-            - arn:aws:events:${AWS::Region}:${ProdAccountId}:event-bus/default
-            - ProdAccountId: !ImportValue cfn-metadata:ProdAccountId

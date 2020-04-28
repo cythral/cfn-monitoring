@@ -1,12 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using NSubstitute;
-using FluentAssertions;
-using NUnit.Framework;
+
 using Amazon.ECS;
 using Amazon.ECS.Model;
+
 using Cythral.CloudFormation.Monitoring.ServiceStopper.Aws;
 using Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils;
+
+using NSubstitute;
+
+using NUnit.Framework;
 
 using Task = System.Threading.Tasks.Task;
 
@@ -63,8 +66,8 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
 
             await serviceScaler.ScaleDown(service);
 
-            await ecsClient.Received().UpdateServiceAsync(Arg.Is<UpdateServiceRequest>(arg => 
-                arg.Cluster == clusterArn && 
+            await ecsClient.Received().UpdateServiceAsync(Arg.Is<UpdateServiceRequest>(arg =>
+                arg.Cluster == clusterArn &&
                 arg.Service == serviceArn &&
                 arg.DesiredCount == 0
             ));

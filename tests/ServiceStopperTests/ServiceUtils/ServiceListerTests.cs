@@ -3,24 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
-using NSubstitute;
-using Amazon.ResourceGroups;
-using Amazon.ResourceGroups.Model;
+
 using Amazon.ECS;
 using Amazon.ECS.Model;
+using Amazon.ResourceGroups;
+using Amazon.ResourceGroups.Model;
+
+using Cythral.CloudFormation.Monitoring.ServiceStopper.Aws;
+using Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils;
 
 using FluentAssertions;
 
-using Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils;
-using Cythral.CloudFormation.Monitoring.ServiceStopper.Aws;
+using NSubstitute;
+
+using NUnit.Framework;
 
 using Task = System.Threading.Tasks.Task;
 
 namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
 {
     public class ServiceListerTests
-    {   
+    {
         string groupName = "groupName";
         ServiceLister lister = null!;
         ResourceGroupsFactory resourceGroupsFactory = null!;
@@ -36,7 +39,8 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
         static List<string> Cluster2ServiceArns = new List<string> { "13", "14" };
         static List<Service> Cluster2Services = Cluster2ServiceArns.Select(arn => new Service { ServiceArn = arn }).ToList();
         static List<Service> Services = Cluster1Services.Concat(Cluster2Services).ToList();
-        static Dictionary<string, List<string>> ServiceArns = new Dictionary<string, List<string>> {
+        static Dictionary<string, List<string>> ServiceArns = new Dictionary<string, List<string>>
+        {
             [Cluster1Arn] = Cluster1ServiceArns,
             [Cluster2Arn] = Cluster2ServiceArns,
         };
@@ -67,7 +71,7 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
         public void SetupEcs()
         {
             ecsClient = Substitute.For<IAmazonECS>();
-            
+
             ecsClient
             .ListServicesAsync(Arg.Is<ListServicesRequest>(req => req.Cluster == Cluster1Arn))
             .Returns(new ListServicesResponse
@@ -86,9 +90,9 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
             .DescribeServicesAsync(Arg.Is<DescribeServicesRequest>(req => req.Cluster == Cluster1Arn))
             .Returns(client => new DescribeServicesResponse
             {
-                Services = Cluster1Services.FindAll(service => 
+                Services = Cluster1Services.FindAll(service =>
                     (client.ArgAt<DescribeServicesRequest>(0)).Services.Contains(service.ServiceArn)
-                ) 
+                )
             });
 
             ecsClient
@@ -97,7 +101,7 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
             )
             .Returns(client => new DescribeServicesResponse
             {
-                Services = Cluster2Services.FindAll(service => 
+                Services = Cluster2Services.FindAll(service =>
                     (client.ArgAt<DescribeServicesRequest>(0)).Services.Contains(service.ServiceArn)
                 )
             });
@@ -133,7 +137,7 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
         public async Task DescribeServicesWasCalledForCluster1Services()
         {
             await lister.List();
-            
+
             await ecsClient.Received().DescribeServicesAsync(Arg.Is<DescribeServicesRequest>(req =>
                 req.Cluster == Cluster1Arn &&
                 Cluster1ServiceArns.Take(10).All(req.Services.Contains)
@@ -149,7 +153,7 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
         public async Task DescribeServicesWasCalledForCluster2Services()
         {
             await lister.List();
-            
+
             await ecsClient.Received().DescribeServicesAsync(Arg.Is<DescribeServicesRequest>(req =>
                 req.Cluster == Cluster2Arn &&
                 Cluster2ServiceArns.All(req.Services.Contains)
