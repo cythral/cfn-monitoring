@@ -74,4 +74,4 @@ Resources:
   Fn::Transform:
     Name: "AWS::Include"
     Parameters:
-      Location: cloudtrail.template.yml
+      Location: ./cloudtrail.template.yml
