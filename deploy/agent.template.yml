@@ -1,5 +1,19 @@
 Transform: AWS::Serverless-2016-10-31
 Resources:
+  CloudTrailBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      LifecycleConfiguration:
+        Rules:
+          - Status: Enabled
+            ExpirationInDays: 30
+
+  CloudTrail:
+    Type: AWS::CloudTrail::Trail
+    Properties:
+      S3BucketName: !Ref CloudTrailBucket
+      IsLogging: true
+
   SharingRole:
     Type: AWS::IAM::Role
     Properties:
@@ -16,10 +30,10 @@ Resources:
         - arn:aws:iam::aws:policy/CloudWatchAutomaticDashboardsAccess
         - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
         - arn:aws:iam::aws:policy/AWSXrayReadOnlyAccess
-  
-  EventsPolicy: 
+
+  EventsPolicy:
     Type: AWS::Events::EventBusPolicy
-    Properties: 
+    Properties:
       Principal: !ImportValue cfn-utilities:MasterAccountId
       Action: events:PutEvents
       StatementId: MasterAccountEvents
@@ -35,7 +49,7 @@ Resources:
           ResourceTypeFilters: [AWS::ECS::Cluster]
           TagFilters:
             - Key: ENABLE_SERVICE_STOPPING
-              Values: ['true']
+              Values: ["true"]
 
   ServiceStopperPolicy:
     Type: AWS::IAM::ManagedPolicy
