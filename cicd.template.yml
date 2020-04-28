@@ -128,7 +128,8 @@ Resources:
               Configuration:
                 StackName: cfn-monitoring
                 ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::master.template.yml.packaged
+                TemplatePath: buildResults::cfn-monitoring.template.yml.packaged
+                TemplateConfiguration: buildResults::cfn-monitoring.shared.config.json
                 RoleArn: !ImportValue cfn-utilities:MasterRoleArn
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
         - Name: Dev
@@ -146,7 +147,8 @@ Resources:
               Configuration:
                 StackName: cfn-monitoring
                 ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::agent.template.yml.packaged
+                TemplatePath: buildResults::cfn-monitoring.template.yml.packaged
+                TemplateConfiguration: buildResults::cfn-monitoring.dev.config.json
                 RoleArn: !ImportValue cfn-metadata:DevAgentRoleArn
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
         - Name: Prod
@@ -164,6 +166,7 @@ Resources:
               Configuration:
                 StackName: cfn-monitoring
                 ActionMode: CREATE_UPDATE
-                TemplatePath: buildResults::agent.template.yml.packaged
+                TemplatePath: buildResults::cfn-monitoring.template.yml.packaged
+                TemplateConfiguration: buildResults::cfn-monitoring.shared.config.json
                 RoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND

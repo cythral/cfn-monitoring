@@ -12,20 +12,14 @@ phases:
       - dotnet test -c Release
 
       - aws cloudformation package
-        --template-file deploy/master.template.yml
+        --template-file deploycfn-monitoring.template.yml
         --s3-bucket $ARTIFACT_STORE
-        --output-template-file deploy/master.template.yml.packaged
+        --output-template-file deploy/cfn-monitoring.template.yml.packaged
 
-      - aws cloudformation package
-        --template-file deploy/agent.template.yml
-        --s3-bucket $ARTIFACT_STORE
-        --output-template-file deploy/agent.template.yml.packaged
-
-      - cfn-lint deploy/master.template.yml.packaged
-      - cfn-lint deploy/agent.template.yml.packaged
-
+      - cfn-lint deploy/cfn-monitoring.template.yml.packaged
+      - ./deploy/create-config-files.sh
 artifacts:
   discard-paths: yes
   files:
-    - "deploy/master.template.yml.packaged"
-    - "deploy/agent.template.yml.packaged"
+    - "deploy/cfn-monitoring.template.yml.packaged"
+    - "cfn-monitoring.*.config.json"

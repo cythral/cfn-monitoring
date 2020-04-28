@@ -1,7 +1,72 @@
 Transform: AWS::Serverless-2016-10-31
+Parameters:
+  CreateCrossAccountServiceRole:
+    Type: String
+    Description: Whether or not to create the cross account CloudWatch service role.
+    AllowedValues:
+      - "true"
+      - "false"
+
+  CreateSharingRole:
+    Type: String
+    Description: Whether or not to create the CloudWatch sharing role.
+    AllowedValues:
+      - "true"
+      - "false"
+
+  EnableServiceStopper:
+    Type: String
+    Description: Whether or not to create and enable the service stopper.
+    AllowedValues:
+      - "true"
+      - "false"
+
+  EnableCrossAccountEvents:
+    Type: String
+    Description: Whether or not to allow events published from the main account.
+    AllowedValues:
+      - "true"
+      - "false"
+
+  EnableCloudTrail:
+    Type: String
+    Description: Whether or not to enable CloudTrail logging.
+    AllowedValues:
+      - "true"
+      - "false"
+
+Conditions:
+  CreateCrossAccountServiceRole: !Equals
+    - !Ref CreateCrossAccountServiceRole
+    - "true"
+
+  CreateSharingRole: !Equals
+    - !Ref CreateSharingRole
+    - "true"
+
+  EnableServiceStopper: !Equals
+    - !Ref EnableServiceStopper
+    - "true"
+
+  EnableCrossAccountEvents: !Equals
+    - !Ref EnableCrossAccountEvents
+    - "true"
+
+  EnableCloudTrail: !Equals
+    - !Ref EnableCloudTrail
+    - "true"
+
 Resources:
+  ServiceLinkedRole:
+    Type: AWS::IAM::ServiceLinkedRole
+    Condition: CreateCrossAccountServiceRole
+    Properties:
+      AWSServiceName: cloudwatch-crossaccount.amazonaws.com
+      Description: Allows CloudWatch to assume CloudWatch-CrossAccountSharing roles in remote accounts on behalf of the current account in order to display data cross-account, cross region
+
   SharingRole:
     Type: AWS::IAM::Role
+    Condition: CreateSharingRole
     Properties:
       RoleName: CloudWatch-CrossAccountSharingRole
       AssumeRolePolicyDocument:
@@ -19,6 +84,7 @@ Resources:
 
   EventsPolicy:
     Type: AWS::Events::EventBusPolicy
+    Condition: EnableCrossAccountEvents
     Properties:
       Principal: !ImportValue cfn-utilities:MasterAccountId
       Action: events:PutEvents
@@ -26,6 +92,7 @@ Resources:
 
   ClustersWithStoppableServices:
     Type: AWS::ResourceGroups::Group
+    Condition: EnableServiceStopper
     Properties:
       Name: ClustersWithStoppableServices
       Description: Clusters who have automatic service stopping enabled
@@ -39,6 +106,7 @@ Resources:
 
   ServiceStopperPolicy:
     Type: AWS::IAM::ManagedPolicy
+    Condition: EnableServiceStopper
     Properties:
       PolicyDocument:
         Version: 2012-10-17
@@ -54,6 +122,7 @@ Resources:
 
   ServiceStopper:
     Type: AWS::Serverless::Function
+    Condition: EnableServiceStopper
     Properties:
       Runtime: dotnetcore3.1
       Handler: ServiceStopper::Cythral.CloudFormation.Monitoring.ServiceStopper.Handler::Handle
@@ -73,6 +142,7 @@ Resources:
 
   CloudTrailBucket:
     Type: AWS::S3::Bucket
+    Condition: EnableCloudTrail
     Properties:
       LifecycleConfiguration:
         Rules:
@@ -81,6 +151,7 @@ Resources:
 
   CloudTrailBucketPolicy:
     Type: AWS::S3::BucketPolicy
+    Condition: EnableCloudTrail
     Properties:
       Bucket: !Ref CloudTrailBucket
       PolicyDocument:
@@ -96,6 +167,7 @@ Resources:
 
   CloudTrail:
     Type: AWS::CloudTrail::Trail
+    Condition: EnableCloudTrail
     DependsOn:
       - CloudTrailBucketPolicy
     Properties:
