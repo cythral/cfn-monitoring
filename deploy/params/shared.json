@@ -1,7 +1,7 @@
 {
-  "CreateCrossAccountServiceRole": true,
-  "CreateSharingRole": false,
-  "EnableServiceStopper": false,
-  "EnableCrossAccountEvents": false,
-  "EnableCloudTrail": true
+  "CreateCrossAccountServiceRole": "true",
+  "CreateSharingRole": "false",
+  "EnableServiceStopper": "false",
+  "EnableCrossAccountEvents": "false",
+  "EnableCloudTrail": "true"
 }
