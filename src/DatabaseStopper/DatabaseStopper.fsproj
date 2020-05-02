@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <AWSProjectType>Lambda</AWSProjectType>
+    <LangVersion></LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseUtils/DatabaseUtils.fs" />
+    <Compile Include="DatabaseUtils/DatabaseListing.fs" />
+    <Compile Include="DatabaseUtils/DatabaseMetrics.fs" />
+    <Compile Include="Handler.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="aws-lambda-tools-defaults.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.0.0" />
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.107.16" />
+    <PackageReference Include="AWSSDK.RDS" Version="3.3.121.4" />
+    <PackageReference Include="AWSSDK.ResourceGroups" Version="3.3.101.162" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="aws-lambda-tools-defaults.json" />
+    <None Include="Readme.md" />
+  </ItemGroup>
+</Project>
