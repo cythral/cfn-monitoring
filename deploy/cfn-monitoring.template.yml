@@ -165,11 +165,44 @@ Resources:
             Principal:
               Service: cloudtrail.amazonaws.com
 
+  CloudTrailLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: EnableCloudTrail
+    Properties:
+      RetentionInDays: 14
+
+  CloudTrailRole:
+    Type: AWS::IAM::Role
+    Condition: EnableCloudTrail
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              Service: cloudtrail.amazonaws.com
+      ManagedPolicyArns:
+        - !Ref CloudTrailPolicy
+
+  CloudTrailPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Condition: EnableCloudTrail
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: logs:*
+            Resource: !GetAtt CloudTrailLogGroup.Arn
+
   CloudTrail:
     Type: AWS::CloudTrail::Trail
     Condition: EnableCloudTrail
     DependsOn:
       - CloudTrailBucketPolicy
     Properties:
+      CloudWatchLogsLogGroupArn: !GetAtt CloudTrailLogGroup.Arn
+      CloudWatchLogsRoleArn: !GetAtt CloudTrailRole.Arn
       S3BucketName: !Ref CloudTrailBucket
       IsLogging: true
