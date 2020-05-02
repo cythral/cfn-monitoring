@@ -60,6 +60,7 @@ Conditions:
     - !Equals
       - !Ref EnableCloudTrail
       - "true"
+
     - !Equals
       - !Ref EnableServiceStopper
       - "true"
