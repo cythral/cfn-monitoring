@@ -56,6 +56,13 @@ Conditions:
     - !Ref EnableCloudTrail
     - "true"
 
+  CreateDeploymentsMetric: !And
+    - !Equals
+      - !Ref EnableCloudTrail
+      - "true"
+    - !Equals
+      - !Ref EnableServiceStopper
+      - "true"
 Resources:
   ServiceLinkedRole:
     Type: AWS::IAM::ServiceLinkedRole
@@ -209,10 +216,9 @@ Resources:
 
   DeploymentsMetric:
     Type: AWS::Logs::MetricFilter
-    Condition: EnableCloudTrail
+    Condition: CreateDeploymentsMetric
     Properties:
-      FilterPattern: |
-        { $.eventName = "UpdateStack" && $.userIdentity.invokedBy = "codepipeline.amazonaws.com" }
+      FilterPattern: < { $.eventName = "UpdateStack" && $.userIdentity.invokedBy = "codepipeline.amazonaws.com" }
       LogGroupName: !Ref CloudTrailLogGroup
       MetricTransformations:
         - MetricName: Deployments
