@@ -154,7 +154,7 @@ Resources:
       LifecycleConfiguration:
         Rules:
           - Status: Enabled
-            ExpirationInDays: 30
+            ExpirationInDays: 14
 
   CloudTrailBucketPolicy:
     Type: AWS::S3::BucketPolicy
