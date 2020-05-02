@@ -205,4 +205,5 @@ Resources:
       CloudWatchLogsLogGroupArn: !GetAtt CloudTrailLogGroup.Arn
       CloudWatchLogsRoleArn: !GetAtt CloudTrailRole.Arn
       S3BucketName: !Ref CloudTrailBucket
+      IncludeGlobalServiceEvents: true
       IsLogging: true
