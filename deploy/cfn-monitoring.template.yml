@@ -219,7 +219,7 @@ Resources:
     Type: AWS::Logs::MetricFilter
     Condition: CreateDeploymentsMetric
     Properties:
-      FilterPattern: '{ ($.eventName = "UpdateStack") && ($.userIdentity.invokedBy = "codepipeline.amazonaws.com") }'
+      FilterPattern: '{ ($.eventSource = "cloudformation.amazonaws.com") && ($.eventName = "UpdateStack") && ($.userIdentity.invokedBy = "codepipeline.amazonaws.com") }'
       LogGroupName: !Ref CloudTrailLogGroup
       MetricTransformations:
         - MetricName: Deployments
