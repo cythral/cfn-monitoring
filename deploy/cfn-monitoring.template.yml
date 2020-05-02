@@ -206,3 +206,18 @@ Resources:
       CloudWatchLogsRoleArn: !GetAtt CloudTrailRole.Arn
       S3BucketName: !Ref CloudTrailBucket
       IsLogging: true
+
+  DeploymentsMetric:
+    Type: AWS::Logs::MetricFilter
+    Condition: EnableCloudTrail
+    Properties:
+      FilterPattern: |
+        {
+          $.eventName = "UpdateStack" && $.userIdentity.invokedBy = "codepipeline.amazonaws.com",
+        }
+      LogGroupName: !Ref CloudTrailLogGroup
+      MetricTransformations:
+        - MetricName: Deployments
+          MetricNamespace: Cythral/Monitoring
+          MetricValue: 1
+          DefaultValue: 0
