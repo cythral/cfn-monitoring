@@ -212,9 +212,7 @@ Resources:
     Condition: EnableCloudTrail
     Properties:
       FilterPattern: |
-        {
-          $.eventName = "UpdateStack" && $.userIdentity.invokedBy = "codepipeline.amazonaws.com",
-        }
+        { $.eventName = "UpdateStack" && $.userIdentity.invokedBy = "codepipeline.amazonaws.com" }
       LogGroupName: !Ref CloudTrailLogGroup
       MetricTransformations:
         - MetricName: Deployments
