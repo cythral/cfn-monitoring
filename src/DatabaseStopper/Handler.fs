@@ -37,6 +37,8 @@ type Handler() =
             if uptime >= 1.0 && connectionCount = 0.0 then
                 match database with
                 | Database.DBCluster cluster ->
+                    printfn "%s" cluster.DBClusterIdentifier
+
                     let request =
                         StopDBClusterRequest(DBClusterIdentifier = cluster.DBClusterIdentifier)
 
@@ -45,12 +47,15 @@ type Handler() =
                     |> ignore
 
                 | Database.DBInstance instance ->
+                    printfn "%s" instance.DBInstanceIdentifier
+
                     let request =
                         StopDBInstanceRequest(DBInstanceIdentifier = instance.DBInstanceIdentifier)
 
                     rdsClient.StopDBInstanceAsync(request)
                     |> Async.AwaitTask
                     |> ignore
+
 
             return None
         }

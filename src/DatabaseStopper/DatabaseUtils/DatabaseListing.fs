@@ -1,5 +1,7 @@
 namespace Cythral.CloudFormation.Monitoring.DatabaseStopper.DatabaseUtils
 
+open System
+open System.Linq
 open System.Collections.Generic
 open System.Threading.Tasks
 
@@ -64,9 +66,14 @@ module DatabaseListing =
     let GetClustersFromResponse (response: ListGroupResourcesResponse, rdsClient: IAmazonRDS) =
         async {
             let clusterArns = GetClusterArnsFromResponse(response)
-            let! clusters =
-                ListClusters(clusterArns, rdsClient)
-                |> Async.AwaitTask
+            let clusters = List<Database> []
+
+            if clusterArns.Count() > 0 then
+                let! newClusters =
+                    ListClusters(clusterArns, rdsClient)
+                    |> Async.AwaitTask
+
+                clusters.AddRange(newClusters)
 
             return clusters
         }
@@ -82,9 +89,14 @@ module DatabaseListing =
     let GetInstancesFromResponse (response: ListGroupResourcesResponse, rdsClient: IAmazonRDS) =
         async {
             let instanceArns = GetInstanceArnsFromResponse(response)
-            let! instances =
-                ListInstances(instanceArns, rdsClient)
-                |> Async.AwaitTask
+            let instances = List<Database> []
+
+            if instanceArns.Count() > 0 then
+                let! newInstances =
+                    ListInstances(instanceArns, rdsClient)
+                    |> Async.AwaitTask
+
+                instances.AddRange(newInstances)
 
             return instances
         }
@@ -115,7 +127,6 @@ module DatabaseListing =
             let! instances =
                 GetInstancesFromResponse(response, rdsClient)
                 |> Async.AwaitTask
-
 
             let both = List<Database>()
             both.AddRange(clusters)
