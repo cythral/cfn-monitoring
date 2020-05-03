@@ -61,7 +61,6 @@ type Handler() =
             let resourceGroupsClient = new AmazonResourceGroupsClient()
             let cloudwatchClient = new AmazonCloudWatchClient()
             let rdsClient = new AmazonRDSClient()
-            request.MonitoredDatabasesGroupName <- "test"
             let! databases =
                 ListDatabases(request.MonitoredDatabasesGroupName, resourceGroupsClient, rdsClient)
                 |> Async.AwaitTask
