@@ -55,7 +55,7 @@ type Handler() =
         }
         |> Async.StartAsTask
 
-    member __.Handle(request: Request, context: ILambdaContext) =
+    member __.Handle(request: Request, context: ILambdaContext): Task<bool> =
         async {
             let resourceGroupsClient = new AmazonResourceGroupsClient()
             let cloudwatchClient = new AmazonCloudWatchClient()
@@ -74,6 +74,6 @@ type Handler() =
                 tasks.Add(task)
 
             Task.WaitAll(tasks.ToArray())
-            return None
+            return true
         }
         |> Async.StartAsTask
