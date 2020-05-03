@@ -1,9 +1,8 @@
-namespace Cythral.CloudFormation.Monitoring.DatabaseStopper
+namespace Cythral.CloudFormation.Monitoring.DatabaseStopper.DatabaseUtils
 
 open Amazon.RDS
 open Amazon.RDS.Model
 
-module DatabaseUtils =
-    type Database =
-        | DBInstance of DBInstance
-        | DBCluster of DBCluster
+type Database =
+    | DBInstance of DBInstance
+    | DBCluster of DBCluster
