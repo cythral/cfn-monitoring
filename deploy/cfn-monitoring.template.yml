@@ -186,8 +186,8 @@ Resources:
             Action:
               - resource-groups:ListGroupResources
               - tag:GetResources
-              - rds:DescribeClusters
-              - rds:DescribeInstances
+              - rds:DescribeDBClusters
+              - rds:DescribeDBInstances
               - cloudwatch:GetMetricStatistics
             Resource: "*"
 
