@@ -21,6 +21,13 @@ Parameters:
       - "true"
       - "false"
 
+  EnableDatabaseStopper:
+    Type: String
+    Description: Whether or not to create and enable the database stopper.
+    AllowedValues:
+      - "true"
+      - "false"
+
   EnableCrossAccountEvents:
     Type: String
     Description: Whether or not to allow events published from the main account.
@@ -46,6 +53,10 @@ Conditions:
 
   EnableServiceStopper: !Equals
     - !Ref EnableServiceStopper
+    - "true"
+
+  EnableDatabaseStopper: !Equals
+    - !Ref EnableDatabaseStopper
     - "true"
 
   EnableCrossAccountEvents: !Equals
@@ -146,6 +157,58 @@ Resources:
             Input: !Sub |
               {
                 "MonitoredClustersGroupName": "${ClustersWithStoppableServices}"
+              }
+
+  StoppableDatabases:
+    Type: AWS::ResourceGroups::Group
+    Condition: EnableDatabaseStopper
+    Properties:
+      Name: StoppableDatabases
+      Description: Databases that can be stopped
+      ResourceQuery:
+        Type: TAG_FILTERS_1_0
+        Query:
+          ResourceTypeFilters:
+            - AWS::RDS::Cluster
+            - AWS::RDS::Instance
+          TagFilters:
+            - Key: ENABLE_DATABASE_STOPPING
+              Values: ["true"]
+
+  DatabaseStopperPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Condition: EnableDatabaseStopper
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - resource-groups:ListGroupResources
+              - tag:GetResources
+              - rds:DescribeClusters
+              - rds:DescribeInstances
+              - cloudwatch:GetMetricStatistics
+            Resource: "*"
+
+  DatabaseStopper:
+    Type: AWS::Serverless::Function
+    Condition: EnableDatabaseStopper
+    Properties:
+      Runtime: dotnetcore3.1
+      Handler: DatabaseStopper::Cythral.CloudFormation.Monitoring.DatabaseStopper.Handler::Handle
+      CodeUri: ../bin/ServiceStopper/Release/netcoreapp3.1/publish/
+      Timeout: 300
+      Policies:
+        - !Ref DatabaseStopperPolicy
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Input: !Sub |
+              {
+                "MonitoredDatabasesGroupName": "${StoppableDatabases}"
               }
 
   CloudTrailBucket:
