@@ -95,8 +95,8 @@ module DatabaseListing =
         async {
             let filterValues =
                 List<string>
-                    [ "AWS::RDS::Cluster"
-                      "AWS::RDS::Instance" ]
+                    [ "AWS::RDS::DBCluster"
+                      "AWS::RDS::DBInstance" ]
 
             let filter =
                 ResourceFilter(Name = ResourceFilterName.ResourceType, Values = filterValues)
