@@ -197,7 +197,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Handler: DatabaseStopper::Cythral.CloudFormation.Monitoring.DatabaseStopper.Handler::Handle
-      CodeUri: ../bin/ServiceStopper/Release/netcoreapp3.1/publish/
+      CodeUri: ../bin/DatabaseStopper/Release/netcoreapp3.1/publish/
       Timeout: 300
       Policies:
         - !Ref DatabaseStopperPolicy
