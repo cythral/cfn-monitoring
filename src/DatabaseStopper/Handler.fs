@@ -20,11 +20,8 @@ open DatabaseUtils.DatabaseMetrics
 [<assembly:LambdaSerializer(typeof<Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer>)>]
 ()
 
-type Request =
-    struct
-        val MonitoredDatabasesGroupName: string
-    end
-
+type Request() =
+    member val MonitoredDatabasesGroupName = "" with get, set
 
 type Handler() =
     member __.StopIfInactive(database: Database, cloudwatchClient: IAmazonCloudWatch, rdsClient: IAmazonRDS) =
@@ -64,7 +61,7 @@ type Handler() =
             let resourceGroupsClient = new AmazonResourceGroupsClient()
             let cloudwatchClient = new AmazonCloudWatchClient()
             let rdsClient = new AmazonRDSClient()
-
+            request.MonitoredDatabasesGroupName <- "test"
             let! databases =
                 ListDatabases(request.MonitoredDatabasesGroupName, resourceGroupsClient, rdsClient)
                 |> Async.AwaitTask
