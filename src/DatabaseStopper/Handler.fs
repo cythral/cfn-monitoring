@@ -20,7 +20,11 @@ open DatabaseUtils.DatabaseMetrics
 [<assembly:LambdaSerializer(typeof<Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer>)>]
 ()
 
-type Request = { MonitoredDatabasesGroupName: string }
+type Request =
+    struct
+        val MonitoredDatabasesGroupName: string
+    end
+
 
 type Handler() =
     member __.StopIfInactive(database: Database, cloudwatchClient: IAmazonCloudWatch, rdsClient: IAmazonRDS) =
