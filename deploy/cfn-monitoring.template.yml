@@ -169,8 +169,8 @@ Resources:
         Type: TAG_FILTERS_1_0
         Query:
           ResourceTypeFilters:
-            - AWS::RDS::Cluster
-            - AWS::RDS::Instance
+            - AWS::RDS::DBCluster
+            - AWS::RDS::DBInstance
           TagFilters:
             - Key: ENABLE_DATABASE_STOPPING
               Values: ["true"]
