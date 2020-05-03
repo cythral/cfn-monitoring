@@ -34,28 +34,30 @@ type Handler() =
                 GetDatabaseUptimeLastHour(database, cloudwatchClient)
                 |> Async.AwaitTask
 
+
             if uptime >= 1.0 && connectionCount = 0.0 then
                 match database with
                 | Database.DBCluster cluster ->
-                    printfn "%s" cluster.DBClusterIdentifier
 
                     let request =
                         StopDBClusterRequest(DBClusterIdentifier = cluster.DBClusterIdentifier)
 
-                    rdsClient.StopDBClusterAsync(request)
-                    |> Async.AwaitTask
-                    |> ignore
+                    let! result =
+                        rdsClient.StopDBClusterAsync(request)
+                        |> Async.AwaitTask
+
+                    printf "%s" result.DBCluster.DBClusterIdentifier
 
                 | Database.DBInstance instance ->
-                    printfn "%s" instance.DBInstanceIdentifier
 
                     let request =
                         StopDBInstanceRequest(DBInstanceIdentifier = instance.DBInstanceIdentifier)
 
-                    rdsClient.StopDBInstanceAsync(request)
-                    |> Async.AwaitTask
-                    |> ignore
+                    let! result =
+                        rdsClient.StopDBInstanceAsync(request)
+                        |> Async.AwaitTask
 
+                    printf "%s" result.DBInstance.DBInstanceIdentifier
 
             return None
         }
@@ -82,3 +84,18 @@ type Handler() =
             return true
         }
         |> Async.StartAsTask
+
+module main =
+    [<EntryPoint>]
+    let main argv =
+        async {
+            let request = Request()
+            request.MonitoredDatabasesGroupName <- "StoppableDatabases"
+
+            let handler = Handler()
+
+            let! result = handler.Handle(request, null) |> Async.AwaitTask
+
+            return 0
+        }
+        |> Async.RunSynchronously
