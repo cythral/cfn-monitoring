@@ -10,10 +10,6 @@ open Amazon.RDS.Model
 
 
 module DatabaseListing =
-    type Database =
-        | DBInstance of DBInstance
-        | DBCluster of DBCluster
-
     let ListClusters (clusterArns: seq<string>, client: IAmazonRDS): Task<List<Database>> =
         async {
             let filter =
@@ -95,7 +91,7 @@ module DatabaseListing =
         |> Async.StartAsTask
 
 
-    let ListDatabases (groupName: string, resourceGroupsClient: IAmazonResourceGroups, rdsClient: IAmazonRDS): Task<List<Database>> =
+    let ListDatabases (groupName: string, resourceGroupsClient: IAmazonResourceGroups, rdsClient: IAmazonRDS) =
         async {
             let filterValues =
                 List<string>
