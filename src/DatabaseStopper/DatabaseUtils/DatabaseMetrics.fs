@@ -34,7 +34,7 @@ module DatabaseMetrics =
                 cloudWatchClient.GetMetricStatisticsAsync(request)
                 |> Async.AwaitTask
 
-            return response.Datapoints.[0].Sum
+            return if response.Datapoints.Count > 0 then response.Datapoints.[0].Sum else 0.0
         }
         |> Async.StartAsTask
 
@@ -64,6 +64,6 @@ module DatabaseMetrics =
                 cloudWatchClient.GetMetricStatisticsAsync(request)
                 |> Async.AwaitTask
 
-            return response.Datapoints.[0].Maximum
+            return if response.Datapoints.Count > 0 then response.Datapoints.[0].Maximum else 0.0
         }
         |> Async.StartAsTask

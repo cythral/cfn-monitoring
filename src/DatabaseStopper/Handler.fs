@@ -65,6 +65,8 @@ type Handler() =
 
     member __.Handle(request: Request, context: ILambdaContext): Task<bool> =
         async {
+            printfn "Stopping inactive databases in group %s" request.MonitoredDatabasesGroupName
+
             let resourceGroupsClient = new AmazonResourceGroupsClient()
             let cloudwatchClient = new AmazonCloudWatchClient()
             let rdsClient = new AmazonRDSClient()
@@ -84,18 +86,3 @@ type Handler() =
             return true
         }
         |> Async.StartAsTask
-
-module main =
-    [<EntryPoint>]
-    let main argv =
-        async {
-            let request = Request()
-            request.MonitoredDatabasesGroupName <- "StoppableDatabases"
-
-            let handler = Handler()
-
-            let! result = handler.Handle(request, null) |> Async.AwaitTask
-
-            return 0
-        }
-        |> Async.RunSynchronously
