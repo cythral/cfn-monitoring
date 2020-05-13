@@ -176,7 +176,7 @@ Resources:
                     "Token.$": "$$.Task.Token"
                   }
                 },
-                "Next": "Success"
+                "Next": "Deploy to Dev"
               },
               "Deploy to Dev": {
                 "Type": "Task",
