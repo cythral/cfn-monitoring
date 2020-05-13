@@ -170,7 +170,7 @@ Resources:
                   "MessageBody": {
                     "StackName": "${GithubRepo}",
                     "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
-                    "TemplateFileName": "cfn-monitoring.template.yml",
+                    "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.shared.config.json",
                     "RoleArn": "${SharedRoleArn}",
                     "Token.$": "$$.Task.Token"
@@ -188,7 +188,7 @@ Resources:
                   "MessageBody": {
                     "StackName": "$(GithubRepo}",
                     "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
-                    "TemplateFileName": "cfn-monitoring.template.yml",
+                    "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.dev.config.json",
                     "RoleArn": "${DevRoleArn}",
                     "Token.$": "$$.Task.Token"
@@ -236,7 +236,7 @@ Resources:
                   "MessageBody": {
                     "StackName": "${GithubRepo}",
                     "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
-                    "TemplateFileName": "cfn-monitoring.template.yml",
+                    "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.prod.config.json",
                     "RoleArn": "${ProdRoleArn}",
                     "Token.$": "$$.Task.Token"
