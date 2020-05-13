@@ -173,7 +173,11 @@ Resources:
                     "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.shared.config.json",
                     "RoleArn": "${SharedRoleArn}",
-                    "Token.$": "$$.Task.Token"
+                    "Token.$": "$$.Task.Token",
+                    "Capabilities": [
+                      "CAPABILITY_IAM",
+                      "CAPABILITY_AUTO_EXPAND"
+                    ]
                   }
                 },
                 "Next": "Deploy to Dev"
@@ -191,7 +195,11 @@ Resources:
                     "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.dev.config.json",
                     "RoleArn": "${DevRoleArn}",
-                    "Token.$": "$$.Task.Token"
+                    "Token.$": "$$.Task.Token",
+                    "Capabilities": [
+                      "CAPABILITY_IAM",
+                      "CAPABILITY_AUTO_EXPAND"
+                    ]
                   }
                 },
                 "Next": "Ask for Approval"
@@ -207,7 +215,7 @@ Resources:
                     "Pipeline": "${GithubRepo}",
                     "ArtifactStore": "${ArtifactStore}",
                     "CustomMessage": "${GithubRepo} requires manual approval for deployment to production",
-                    "Token.$": "$$.Task.Token" 
+                    "Token.$": "$$.Task.Token"
                   }
                 }
               },
@@ -239,7 +247,11 @@ Resources:
                     "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.prod.config.json",
                     "RoleArn": "${ProdRoleArn}",
-                    "Token.$": "$$.Task.Token"
+                    "Token.$": "$$.Task.Token",
+                    "Capabilities": [
+                      "CAPABILITY_IAM",
+                      "CAPABILITY_AUTO_EXPAND"
+                    ]
                   }
                 },
                 "Next": "Success"
