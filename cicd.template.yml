@@ -156,9 +156,27 @@ Resources:
                   {
                     "Variable": "$.SupersededOutput.Superseded",
                     "BooleanEquals": false,
-                    "Next": "Deploy to Dev"
+                    "Next": "Deploy to Shared"
                   }
                 ]
+              },
+              "Deploy to Shared": {
+                "Type": "Task",
+                "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+                "ResultPath": null,
+                "Parameters": {
+                  "QueueUrl": "${DeploymentQueue}",
+                  "MessageGroupId": "${GithubRepo}",
+                  "MessageBody": {
+                    "StackName": "${GithubRepo}",
+                    "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
+                    "TemplateFileName": "cfn-monitoring.template.yml.packaged",
+                    "TemplateConfigurationFileName": "cfn-monitoring.shared.config.json",
+                    "RoleArn": "${SharedRoleArn}",
+                    "Token.$": "$$.Task.Token"
+                  }
+                },
+                "Next": "Deploy to Dev"
               },
               "Deploy to Dev": {
                 "Type": "Task",
@@ -170,7 +188,7 @@ Resources:
                   "MessageBody": {
                     "StackName": "$(GithubRepo}",
                     "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
-                    "TemplateFileName": "cfn-monitoring.template.yml",
+                    "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.dev.config.json",
                     "RoleArn": "${DevRoleArn}",
                     "Token.$": "$$.Task.Token"
@@ -218,7 +236,7 @@ Resources:
                   "MessageBody": {
                     "StackName": "${GithubRepo}",
                     "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
-                    "TemplateFileName": "cfn-monitoring.template.yml",
+                    "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.prod.config.json",
                     "RoleArn": "${ProdRoleArn}",
                     "Token.$": "$$.Task.Token"
@@ -233,4 +251,5 @@ Resources:
           }
         - DevRoleArn: !ImportValue cfn-metadata:DevAgentRoleArn
           ProdRoleArn: !ImportValue cfn-metadata:ProdAgentRoleArn
+          SharedRoleArn: !ImportValue cfn-utilities:MasterRoleArn
           ApprovalNotificationFunction: cfn-core-ApprovalNotificationFunction-14V53I9N6Z2YZ
