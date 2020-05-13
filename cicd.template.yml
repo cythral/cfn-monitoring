@@ -197,7 +197,7 @@ Resources:
                     "RoleArn": "${DevRoleArn}",
                     "Token.$": "$$.Task.Token",
                     "Capabilities": [
-                      "CAPABILITY_IAM",
+                      "CAPABILITY_NAMED_IAM",
                       "CAPABILITY_AUTO_EXPAND"
                     ]
                   }
