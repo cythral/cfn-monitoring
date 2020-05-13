@@ -190,7 +190,7 @@ Resources:
                   "QueueUrl": "${DeploymentQueue}",
                   "MessageGroupId": "${GithubRepo}",
                   "MessageBody": {
-                    "StackName": "$(GithubRepo}",
+                    "StackName": "${GithubRepo}",
                     "ZipLocation.$": "$.BuildOutput.Build.Artifacts.Location",
                     "TemplateFileName": "cfn-monitoring.template.yml.packaged",
                     "TemplateConfigurationFileName": "cfn-monitoring.dev.config.json",
