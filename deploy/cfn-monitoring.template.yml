@@ -279,6 +279,7 @@ Resources:
       CloudWatchLogsRoleArn: !GetAtt CloudTrailRole.Arn
       S3BucketName: !Ref CloudTrailBucket
       IsLogging: true
+      IncludeGlobalServiceEvents: true
 
   DeploymentsMetric:
     Type: AWS::Logs::MetricFilter
