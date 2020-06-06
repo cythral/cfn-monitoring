@@ -73,7 +73,13 @@
                     "Capabilities": [
                         "CAPABILITY_IAM",
                         "CAPABILITY_AUTO_EXPAND"
-                    ]
+                    ],
+                    "EnvironmentName": "shared",
+                    "CommitInfo": {
+                        "GithubOwner": "${GithubOwner}",
+                        "GithubRepository": "${GithubRepo}",
+                        "GithubRef.$": "$.head_commit.id"
+                    }
                 }
             },
             "Next": "Deploy to Dev"
