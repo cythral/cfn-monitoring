@@ -7,13 +7,6 @@ Parameters:
       - "true"
       - "false"
 
-  CreateSharingRole:
-    Type: String
-    Description: Whether or not to create the CloudWatch sharing role.
-    AllowedValues:
-      - "true"
-      - "false"
-
   EnableServiceStopper:
     Type: String
     Description: Whether or not to create and enable the service stopper.
@@ -47,10 +40,6 @@ Conditions:
     - !Ref CreateCrossAccountServiceRole
     - "true"
 
-  CreateSharingRole: !Equals
-    - !Ref CreateSharingRole
-    - "true"
-
   EnableServiceStopper: !Equals
     - !Ref EnableServiceStopper
     - "true"
@@ -75,6 +64,7 @@ Conditions:
     - !Equals
       - !Ref EnableServiceStopper
       - "true"
+
 Resources:
   ServiceLinkedRole:
     Type: AWS::IAM::ServiceLinkedRole
@@ -85,7 +75,6 @@ Resources:
 
   SharingRole:
     Type: AWS::IAM::Role
-    Condition: CreateSharingRole
     Properties:
       RoleName: CloudWatch-CrossAccountSharingRole
       AssumeRolePolicyDocument:
@@ -94,12 +83,28 @@ Resources:
           - Effect: Allow
             Action: sts:AssumeRole
             Principal:
-              AWS: !ImportValue cfn-utilities:MasterAccountId
+              AWS: "*"
+            Condition:
+              StringEquals:
+                aws:PrincipalOrgId: !ImportValue cfn-metadata:OrganizationId
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
         - arn:aws:iam::aws:policy/CloudWatchAutomaticDashboardsAccess
         - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
         - arn:aws:iam::aws:policy/AWSXrayReadOnlyAccess
+        - !Ref ListAccountsPolicy
+
+  ListAccountsPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - organizations:ListAccounts
+              - organizations:ListAccountsForParent
+            Resource: "*"
 
   EventsPolicy:
     Type: AWS::Events::EventBusPolicy

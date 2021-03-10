@@ -1,6 +1,5 @@
 {
   "CreateCrossAccountServiceRole": "false",
-  "CreateSharingRole": "true",
   "EnableServiceStopper": "true",
   "EnableDatabaseStopper": "true",
   "EnableCrossAccountEvents": "true",
