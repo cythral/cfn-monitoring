@@ -2,8 +2,10 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      dotnet: 3.1
+      docker: 19
+
     commands:
+      - dotnet-install.sh --jsonfile global.json
       - pip install cfn-lint
 
   build:
