@@ -35,13 +35,6 @@ Parameters:
       - "true"
       - "false"
 
-  EnableLogDelivery:
-    Type: String
-    Description: Whether or not to enable log delivery to this account.
-    AllowedValues:
-      - "true"
-      - "false"
-
 Conditions:
   CreateCrossAccountServiceRole: !Equals
     - !Ref CreateCrossAccountServiceRole
@@ -71,10 +64,6 @@ Conditions:
     - !Equals
       - !Ref EnableServiceStopper
       - "true"
-
-  EnableLogDelivery: !Equals 
-    - !Ref EnableLogDelivery
-    - "true"
 
 Resources:
   ServiceLinkedRole:
@@ -297,4 +286,14 @@ Resources:
       IsLogging: true
       IncludeGlobalServiceEvents: true
 
-  
+  DeploymentsMetric:
+    Type: AWS::Logs::MetricFilter
+    Condition: CreateDeploymentsMetric
+    Properties:
+      FilterPattern: '{ ($.eventSource = "cloudformation.amazonaws.com") && ($.eventName = "UpdateStack") && ($.userIdentity.invokedBy = "codepipeline.amazonaws.com") }'
+      LogGroupName: !Ref CloudTrailLogGroup
+      MetricTransformations:
+        - MetricName: Deployments
+          MetricNamespace: Cythral/Monitoring
+          MetricValue: 1
+          DefaultValue: 0
