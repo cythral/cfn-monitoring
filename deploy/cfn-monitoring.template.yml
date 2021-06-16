@@ -1,3 +1,4 @@
+Description: Resources for monitoring applications and keeping costs low.
 Transform: AWS::Serverless-2016-10-31
 Parameters:
   CreateCrossAccountServiceRole:
@@ -285,6 +286,10 @@ Resources:
       S3BucketName: !Ref CloudTrailBucket
       IsLogging: true
       IncludeGlobalServiceEvents: true
+      EventSelectors:
+        - DataResources:
+            - Type: AWS::Lambda::Function
+              Values: [arn:aws:lambda]
 
   DeploymentsMetric:
     Type: AWS::Logs::MetricFilter
