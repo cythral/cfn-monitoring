@@ -15,7 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" Version="2.0.0" />
-    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.0.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.1.0" />
     <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.107.16" />
     <PackageReference Include="AWSSDK.RDS" Version="3.3.121.4" />
     <PackageReference Include="AWSSDK.ResourceGroups" Version="3.3.101.162" />
