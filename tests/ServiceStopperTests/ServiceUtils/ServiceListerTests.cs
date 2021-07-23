@@ -59,7 +59,10 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
             .ListGroupResourcesAsync(Arg.Any<ListGroupResourcesRequest>())
             .Returns(new ListGroupResourcesResponse
             {
-                ResourceIdentifiers = ClusterArns.Select(arn => new ResourceIdentifier { ResourceArn = arn }).ToList()
+                Resources = ClusterArns.Select(arn => new ListGroupResourcesItem
+                {
+                    Identifier = new ResourceIdentifier { ResourceArn = arn }
+                }).ToList()
             });
 
             resourceGroupsFactory = Substitute.For<ResourceGroupsFactory>();
@@ -118,7 +121,7 @@ namespace Cythral.CloudFormation.Monitoring.Tests.ServiceStopper.ServiceUtils
             await lister.List();
 
             await resourceGroupsClient.Received().ListGroupResourcesAsync(Arg.Is<ListGroupResourcesRequest>(req =>
-                req.GroupName == groupName &&
+                req.Group == groupName &&
                 req.Filters.Any(filter => filter.Name == ResourceFilterName.ResourceType && filter.Values.Contains("AWS::ECS::Cluster"))
             ));
         }
