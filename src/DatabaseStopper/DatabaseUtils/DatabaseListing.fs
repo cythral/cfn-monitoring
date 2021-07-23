@@ -58,9 +58,9 @@ module DatabaseListing =
 
     let GetClusterArnsFromResponse (response: ListGroupResourcesResponse) =
         query {
-            for identifier in response.ResourceIdentifiers do
-                where (identifier.ResourceType = "AWS::RDS::DBCluster")
-                select identifier.ResourceArn
+            for resource in response.Resources do
+                where (resource.Identifier.ResourceType = "AWS::RDS::DBCluster")
+                select resource.Identifier.ResourceArn
         }
 
     let GetClustersFromResponse (response: ListGroupResourcesResponse, rdsClient: IAmazonRDS) =
@@ -81,9 +81,9 @@ module DatabaseListing =
 
     let GetInstanceArnsFromResponse (response: ListGroupResourcesResponse) =
         query {
-            for identifier in response.ResourceIdentifiers do
-                where (identifier.ResourceType = "AWS::RDS::DBInstance")
-                select identifier.ResourceArn
+            for resource in response.Resources do
+                where (resource.Identifier.ResourceType = "AWS::RDS::DBInstance")
+                select resource.Identifier.ResourceArn
         }
 
     let GetInstancesFromResponse (response: ListGroupResourcesResponse, rdsClient: IAmazonRDS) =

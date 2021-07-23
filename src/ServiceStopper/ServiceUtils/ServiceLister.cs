@@ -38,7 +38,7 @@ namespace Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils
             var client = resourceGroupsFactory.Create();
             var listGroupResourcesResponse = await client.ListGroupResourcesAsync(new ListGroupResourcesRequest
             {
-                GroupName = monitoredClustersGroupName,
+                Group = monitoredClustersGroupName,
                 Filters = new List<ResourceFilter> {
                     new ResourceFilter {
                         Name = ResourceFilterName.ResourceType,
@@ -47,7 +47,7 @@ namespace Cythral.CloudFormation.Monitoring.ServiceStopper.ServiceUtils
                 }
             });
 
-            return listGroupResourcesResponse.ResourceIdentifiers.Select(identifier => identifier.ResourceArn).ToList();
+            return listGroupResourcesResponse.Resources.Select(resource => resource.Identifier.ResourceArn).ToList();
         }
 
         private Dictionary<string, List<string>> GetClusterToServiceArnsDict(List<string> clusterArns)
