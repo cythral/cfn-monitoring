@@ -36,6 +36,10 @@ Parameters:
       - "true"
       - "false"
 
+  LogGroupRetentionInDays:
+    Type: Number
+    Description: Minimum number of days to retain logs for.
+
 Conditions:
   CreateCrossAccountServiceRole: !Equals
     - !Ref CreateCrossAccountServiceRole
@@ -217,7 +221,7 @@ Resources:
       LifecycleConfiguration:
         Rules:
           - Status: Enabled
-            ExpirationInDays: 14
+            ExpirationInDays: !Ref LogGroupRetentionInDays
 
   CloudTrailBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -239,7 +243,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Condition: EnableCloudTrail
     Properties:
-      RetentionInDays: 14
+      RetentionInDays: !Ref LogGroupRetentionInDays
 
   CloudTrailRole:
     Type: AWS::IAM::Role
@@ -328,4 +332,22 @@ Resources:
         Owner: AWS
         SourceIdentifier: CW_LOGGROUP_RETENTION_PERIOD_CHECK
       InputParameters:
-        MinRetentionTime: "14"
+        MinRetentionTime: !Sub "${LogGroupRetentionInDays}"
+
+  LogGroupRetentionRemediationConfig:
+    Type: AWS::Config::RemediationConfiguration
+    Properties:
+      TargetType: SSM_DOCUMENT
+      ConfigRuleName: !Ref LogGroupRetentionRule
+      TargetId: !Ref LogGroupRetentionRemediationDocument
+      Automatic: true
+      Parameters:
+        AutomationAssumeRole:
+          StaticValue:
+            Values: [!GetAtt LogGroupRetentionRemediationRole.Arn]
+        RetentionInDays:
+          StaticValue:
+            Values: [!Sub "${LogGroupRetentionInDays}"]
+        LogGroupName:
+          ResourceValue:
+            Value: RESOURCE_ID
