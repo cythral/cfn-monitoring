@@ -288,7 +288,6 @@ Resources:
       ConfigRuleName: LogGroupRetentionRule
       Description: Checks whether Amazon CloudWatch LogGroup retention period is set to specific number of days. The rule is NON_COMPLIANT if the retention period is not set or is less than the configured retention period.
       MaximumExecutionFrequency: Twelve_Hours
-      Scope: {}
       Source:
         Owner: AWS
         SourceIdentifier: CW_LOGGROUP_RETENTION_PERIOD_CHECK
