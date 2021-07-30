@@ -3,5 +3,6 @@
   "EnableServiceStopper": "true",
   "EnableDatabaseStopper": "true",
   "EnableCrossAccountEvents": "true",
-  "EnableCloudTrail": "true"
+  "EnableCloudTrail": "true",
+  "LogGroupRetentionInDays": "14"
 }
