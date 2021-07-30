@@ -1,0 +1,25 @@
+description: Set Retention Period on Log Groups
+schemaVersion: "0.3"
+assumeRole: "{{ AutomationAssumeRole }}"
+parameters:
+  LogGroupName:
+    type: String
+    description: Name of the Log Group to set retention period for.
+  
+  RetentionInDays:
+    type: String
+    description: Number of days to retain logs for.
+
+  AutomationAssumeRole:
+    type: String
+    description: The ARN of the role that allows Automation to perform the actions on your behalf.
+
+mainSteps:
+- name: PutRetentionPolicy
+  action: aws:executeAwsApi
+  inputs:
+    Service: logs
+    Api:  PutRetentionPolicy
+    LogGroupName: "{{LogGroupName}}"
+    RetentionInDays: "{{RetentionInDays}}"
+  isEnd: true
