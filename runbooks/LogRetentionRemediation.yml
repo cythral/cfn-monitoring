@@ -20,6 +20,6 @@ mainSteps:
   inputs:
     Service: logs
     Api:  PutRetentionPolicy
-    LogGroupName: "{{LogGroupName}}"
-    RetentionInDays: "{{RetentionInDays}}"
+    logGroupName: "{{LogGroupName}}"
+    retentionInDays: "{{RetentionInDays}}"
   isEnd: true
