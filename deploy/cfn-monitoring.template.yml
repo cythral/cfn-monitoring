@@ -310,7 +310,6 @@ Resources:
   LogGroupRetentionRemediationDocument:
     Type: AWS::SSM::Document
     Properties:
-      Name: LogGroupRetentionRemediation
       DocumentFormat: YAML
       DocumentType: Automation
       Content: 
