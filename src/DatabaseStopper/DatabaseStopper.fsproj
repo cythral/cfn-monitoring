@@ -16,9 +16,9 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
-    <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.3.37" />
-    <PackageReference Include="AWSSDK.RDS" Version="3.7.10.16" />
-    <PackageReference Include="AWSSDK.ResourceGroups" Version="3.7.0.138" />
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.3.38" />
+    <PackageReference Include="AWSSDK.RDS" Version="3.7.10.17" />
+    <PackageReference Include="AWSSDK.ResourceGroups" Version="3.7.0.139" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="aws-lambda-tools-defaults.json" />
