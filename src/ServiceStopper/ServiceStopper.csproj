@@ -8,8 +8,8 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.1.0" />
-    <PackageReference Include="AWSSDK.ECS" Version="3.7.5.50" />
-    <PackageReference Include="AWSSDK.ResourceGroups" Version="3.7.0.179" />
+    <PackageReference Include="AWSSDK.ECS" Version="3.7.5.51" />
+    <PackageReference Include="AWSSDK.ResourceGroups" Version="3.7.0.180" />
   </ItemGroup>
   
 </Project>
